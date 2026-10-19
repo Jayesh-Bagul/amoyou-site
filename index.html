@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AmoYou</title>
+  <meta name="description" content="Thank you, from AmoYou. Our product has been wrapped up.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -30 180 180'%3E%3Crect x='0' y='-30' width='180' height='180' rx='36' fill='black'/%3E%3Cpath d='M 5 90 H 45 M 55 80 L 80 30 M 95 30 L 120 80 M 130 90 H 170' fill='none' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --text-soft: #cccccc;
+      --text-faint: rgba(255, 255, 255, 0.5);
+      --grid-line: rgba(255, 255, 255, 0.08);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color-scheme: dark;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { height: 100%; }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text-soft);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    }
+
+    ::selection { background: rgb(88, 88, 88); color: #ffffff; }
+
+    /* Background: the original AmoYou grid and soft glow */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .backdrop .grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.4;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(circle at center, #fff 0%, rgba(255, 255, 255, 0.5) 60%, transparent 100%);
+      -webkit-mask-image: radial-gradient(circle at center, #fff 0%, rgba(255, 255, 255, 0.5) 60%, transparent 100%);
+    }
+
+    .backdrop .glow {
+      position: absolute;
+      top: 15%;
+      left: 25%;
+      width: 50vw;
+      height: 50vh;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02) 40%, transparent 70%);
+      filter: blur(120px);
+    }
+
+    /* Header with the AmoYou mark */
+    .header {
+      display: flex;
+      align-items: center;
+      margin: 20px;
+      padding: 15px;
+      border-radius: var(--radius-lg);
+      background: var(--bg);
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      border-radius: 12px;
+    }
+
+    .logo svg {
+      width: 45px;
+      height: 45px;
+      padding-bottom: 5px;
+    }
+
+    .logo span {
+      color: var(--text-soft);
+      font-weight: 500;
+      margin-bottom: 4.5px;
+    }
+
+    /* Main message */
+    .message {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px 80px;
+    }
+
+    .message h1 {
+      font-size: clamp(2.6rem, 6vw, 5.5rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: var(--text-soft);
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+    }
+
+    .message p {
+      margin-top: 1.5rem;
+      max-width: 36rem;
+      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    .button {
+      margin-top: 3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 32px;
+      background: var(--text-soft);
+      color: #000000;
+      border-radius: var(--radius);
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, background-color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-4px) scale(1.04);
+      background: var(--text);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    }
+
+    /* One gentle entrance, in order: heading, text, button */
+    .message > * {
+      opacity: 0;
+      animation: rise 0.8s ease-out forwards;
+    }
+    .message > :nth-child(1) { animation-delay: 0.2s; }
+    .message > :nth-child(2) { animation-delay: 0.4s; }
+    .message > :nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 40px 32px;
+      color: var(--text-faint);
+      font-size: 1rem;
+    }
+
+    .footer a {
+      color: var(--text);
+      font-size: 1.15rem;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    /* Keyboard focus */
+    a:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    /* Phones */
+    @media (max-width: 767px) {
+      .header { margin: 12px; padding: 12px; }
+      .logo { font-size: 1.4rem; }
+      .logo svg { width: 38px; height: 38px; padding-bottom: 8px; }
+      .message { padding: 24px 20px 64px; }
+      .button { margin-top: 2.25rem; }
+      .footer {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 24px 20px 28px;
+      }
+    }
+
+    /* Respect reduced-motion settings */
+    @media (prefers-reduced-motion: reduce) {
+      .message > * { opacity: 1; animation: none; }
+      .button { transition: none; }
+      .button:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <div class="grid"></div>
+    <div class="glow"></div>
+  </div>
+
+  <header class="header">
+    <a href="/" class="logo" aria-label="AmoYou home">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 100" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M 5 90 H 45 M 55 80 L 80 30 M 95 30 L 120 80 M 130 90 H 170" />
+      </svg>
+      <span>AmoYou</span>
+    </a>
+  </header>
+
+  <main class="message">
+    <h1>Thank you, from AmoYou.</h1>
+    <p>Our product has been wrapped up. We truly appreciate everyone who used it and shared feedback.</p>
+    <a class="button" href="mailto:hello@amoyou.com">Contact us</a>
+  </main>
+
+  <footer class="footer">
+    <a href="mailto:hello@amoyou.com">hello@amoyou.com</a>
+    <p>© 2025–2026 AmoYou</p>
+  </footer>
+</body>
+</html>
