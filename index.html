@@ -127,72 +127,37 @@
 
     .message p {
       margin-top: 1.5rem;
-      max-width: 36rem;
+      max-width: 40rem;
       font-size: clamp(1.1rem, 2.2vw, 1.4rem);
       line-height: 1.6;
       color: var(--text-soft);
     }
 
-    .button {
-      margin-top: 3rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px 32px;
-      background: var(--text-soft);
-      color: #000000;
-      border-radius: var(--radius);
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, background-color 0.2s ease;
+    /* The email address inside the message */
+    .message p a {
+      color: var(--text);
+      white-space: nowrap;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.4);
+      text-underline-offset: 4px;
+      transition: text-decoration-color 0.2s ease;
     }
 
-    .button:hover {
-      transform: translateY(-4px) scale(1.04);
-      background: var(--text);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    .message p a:hover {
+      text-decoration-color: var(--text);
     }
 
-    /* One gentle entrance, in order: heading, text, button */
+    /* One gentle entrance: heading, then message */
     .message > * {
       opacity: 0;
       animation: rise 0.8s ease-out forwards;
     }
     .message > :nth-child(1) { animation-delay: 0.2s; }
     .message > :nth-child(2) { animation-delay: 0.4s; }
-    .message > :nth-child(3) { animation-delay: 0.6s; }
 
     @keyframes rise {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Footer */
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 24px 40px 32px;
-      color: var(--text-faint);
-      font-size: 1rem;
-    }
-
-    .footer a {
-      color: var(--text);
-      font-size: 1.15rem;
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-      text-underline-offset: 4px;
     }
 
     /* Keyboard focus */
@@ -207,20 +172,11 @@
       .logo { font-size: 1.4rem; }
       .logo svg { width: 38px; height: 38px; padding-bottom: 8px; }
       .message { padding: 24px 20px 64px; }
-      .button { margin-top: 2.25rem; }
-      .footer {
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        padding: 24px 20px 28px;
-      }
     }
 
     /* Respect reduced-motion settings */
     @media (prefers-reduced-motion: reduce) {
       .message > * { opacity: 1; animation: none; }
-      .button { transition: none; }
-      .button:hover { transform: none; }
     }
   </style>
 </head>
@@ -241,13 +197,7 @@
 
   <main class="message">
     <h1>Thank you, from AmoYou.</h1>
-    <p>Our product has been wrapped up. We truly appreciate everyone who used it and shared feedback.</p>
-    <a class="button" href="mailto:hello@amoyou.com">Contact us</a>
+    <p>Our product has been wrapped up. We truly appreciate everyone who used it and shared feedback. If there’s anything we can help with, write to us at <a href="mailto:hello@amoyou.com">hello@amoyou.com</a>.</p>
   </main>
-
-  <footer class="footer">
-    <a href="mailto:hello@amoyou.com">hello@amoyou.com</a>
-    <p>© 2025–2026 AmoYou</p>
-  </footer>
 </body>
 </html>
